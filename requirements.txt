@@ -1,0 +1,8 @@
+vllm
+datasets
+numpy
+scipy
+pandas
+pyarrow
+matplotlib
+pytest
