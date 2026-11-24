@@ -1,0 +1,32 @@
+base audit acc 0.168 | best edit 0.887 | edits 36
+    regime  n_dev    gate  commits  commits_sd  helpful_pct  null_pct  harmful_pct  final_gain  final_gain_sd   cost
+controlled     20  greedy      2.6         0.9         47.6      49.0          3.4        69.1            1.4  720.0
+controlled     20 mcnemar      1.1         0.2         97.4       2.4          0.2        68.7            2.1  720.0
+controlled     20    pace      1.0         0.0        100.0       0.0          0.0        68.6            2.4  712.2
+controlled     40  greedy      3.0         1.1         43.0      53.9          3.1        69.2            1.3 1440.0
+controlled     40 mcnemar      1.2         0.4         92.3       7.4          0.3        68.9            1.7 1440.0
+controlled     40    pace      1.1         0.2         99.5       0.5          0.0        68.7            1.8 1412.0
+controlled    100  greedy      3.3         1.2         38.8      59.4          1.8        69.3            1.1 3600.0
+controlled    100 mcnemar      1.3         0.5         87.6      12.4          0.0        69.1            1.4 3600.0
+controlled    100    pace      1.2         0.4         92.6       7.2          0.2        69.0            1.5 3505.2
+stochastic     20  greedy      9.1         2.8         20.4      71.3          8.3        69.0            1.7  720.0
+stochastic     20 mcnemar      1.2         0.4         90.2       8.8          1.0        68.8            1.8  720.0
+stochastic     20    pace      1.0         0.1         99.9       0.1          0.0        68.5            2.8  713.0
+stochastic     40  greedy      9.8         3.0         19.1      73.3          7.6        69.2            1.6 1440.0
+stochastic     40 mcnemar      1.5         0.6         76.7      21.5          1.8        69.1            1.7 1440.0
+stochastic     40    pace      1.1         0.3         95.9       3.8          0.3        68.9            1.8 1412.7
+stochastic    100  greedy     10.5         2.8         17.6      75.5          6.9        69.4            1.5 3600.0
+stochastic    100 mcnemar      1.7         0.8         68.3      30.1          1.6        69.3            1.5 3600.0
+stochastic    100    pace      1.5         0.6         77.4      21.6          0.9        69.2            1.5 3497.6
+         variant  commits  commits_sd  helpful_pct  null_pct  harmful_pct  final_gain  final_gain_sd   cost
+          greedy      9.8         3.0         19.1      73.3          7.6        69.2            1.6 1440.0
+         mcnemar      1.5         0.6         76.7      21.5          1.8        69.1            1.7 1440.0
+            pace      1.1         0.3         95.9       3.8          0.3        68.9            1.8 1412.7
+        pace_fut      1.1         0.3         95.9       3.8          0.3        68.9            1.8 1135.0
+        pace_l25      1.0         0.0        100.0       0.0          0.0        68.4            3.0 1422.9
+        pace_l75      1.4         0.6         80.0      18.7          1.4        69.0            1.7 1406.1
+        pace_a10      1.4         0.6         79.8      18.8          1.4        69.0            1.7 1406.1
+       ladder_02      9.8         3.0         19.1      73.3          7.6        69.2            1.6 1440.0
+       ladder_05      3.9         1.8         35.2      59.1          5.8        69.3            1.6 1440.0
+       ladder_10      1.8         0.8         64.2      33.5          2.3        69.2            1.6 1440.0
+greedy_fresh_dev     11.8         2.8         17.9      73.9          8.2        69.2            1.6 1440.0
