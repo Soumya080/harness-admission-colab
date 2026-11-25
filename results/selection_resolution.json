@@ -1,0 +1,23 @@
+{
+ "good_prompts": 28,
+ "median_discordance": 0.107,
+ "median_true_gap_pts": 1.8,
+ "resolution": {
+  "40": {
+   "paired_se_pts": 5.2,
+   "ci95_halfwidth_pts": 10.2,
+   "mde_80pct_power_pts": 14.5
+  },
+  "100": {
+   "paired_se_pts": 3.3,
+   "ci95_halfwidth_pts": 6.4,
+   "mde_80pct_power_pts": 9.2
+  },
+  "400": {
+   "paired_se_pts": 1.6,
+   "ci95_halfwidth_pts": 3.2,
+   "mde_80pct_power_pts": 4.6
+  }
+ },
+ "picks_worse_at_n100_pct": 29.9
+}
