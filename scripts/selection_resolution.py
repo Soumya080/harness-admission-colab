@@ -1,5 +1,5 @@
 """How well can a small validation set tell good prompts apart? CPU only.
-Uses prompts that score >= 80% on the 400-item audit ("good prompts").
+Uses "good prompts": those within --within points of the best audit accuracy (default 10).
 Reports their pairwise discordance and true gaps, the paired standard error at several validation sizes,
 and how often an n-item comparison (temperature 0.7 samples) picks the worse of two prompts whose audit
 accuracies differ by >= 2 points.   python -m scripts.selection_resolution [--n 100] [--reps 200]"""
@@ -15,16 +15,17 @@ def main():
     ap.add_argument("--n", type=int, default=100)
     ap.add_argument("--reps", type=int, default=200)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--within", type=float, default=10.0)
     a = ap.parse_args()
     hs = [load_harness(x) for x in sorted(list_harnesses())]
     p = load_pools()
     O, S, AU = load_matrices(cache.load_all(), [h.id for h in hs], p["dev"], p["audit"])
     acc = AU.mean(axis=1)
-    top = [k for k in range(len(hs)) if acc[k] >= 0.80]
+    top = [k for k in range(len(hs)) if acc[k] >= acc.max() - a.within / 100]
     pairs = list(itertools.combinations(top, 2))
     q = np.median([np.mean(AU[x] != AU[y]) for x, y in pairs])
     gap = np.median([abs(acc[x] - acc[y]) for x, y in pairs])
-    out = {"good_prompts": len(top), "median_discordance": round(float(q), 3),
+    out = {"good_prompts": len(top), "good_threshold_acc": round(float(acc.max() - a.within / 100), 3), "median_discordance": round(float(q), 3),
            "median_true_gap_pts": round(100 * float(gap), 1), "resolution": {}}
     for n in (40, 100, 400):
         se = np.sqrt(q / n)

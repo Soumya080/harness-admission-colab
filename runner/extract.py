@@ -47,10 +47,18 @@ def extract_gsm8k_answer(text: str) -> float | None:
 
 
 def score_numeric(pred: float | None, gold: float, tol: float = 1e-4) -> int:
-    """Returns 1 for correct prediction within tolerance, else 0."""
+    """1 if the prediction matches the gold answer, else 0.
+    Integer gold answers (all of GSM8K, most of GSM-Hard) must match within `tol`.
+    Non-integer gold answers (some GSM-Hard targets, e.g. 14053029.666667) also accept a rounded answer:
+    absolute error <= 0.01 or relative error <= 1e-4."""
     if pred is None:
         return 0
-    return 1 if abs(pred - gold) <= tol else 0
+    if abs(pred - gold) <= tol:
+        return 1
+    if abs(gold - round(gold)) > 1e-6:
+        if abs(pred - gold) <= 0.01 or abs(pred - gold) <= 1e-4 * abs(gold):
+            return 1
+    return 0
 
 
 def extract_and_score(generated_text: str, gold_val: float) -> tuple[float | None, int]:

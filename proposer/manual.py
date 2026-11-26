@@ -1,7 +1,12 @@
-"""Hand-made harnesses. python -m proposer.manual  saves: base (handicapped), planted, no-ops.
-Tags: base = the START of every run (handicapped). planted = the known-real edit. noop = known-null edits."""
+"""Hand-made harnesses. python -m proposer.manual
+HA_REGIME=handicap (default): base = handicapped prompt, planted = the known-real fix, noop = rewordings of base.
+HA_REGIME=clean: base = the clean prompt, noop = rewordings of it, no planted edit (a realistic start)."""
 from harness.core import Harness
+import os
 from harness.store import save_harness
+
+REGIME = os.environ.get("HA_REGIME", "handicap")
+assert REGIME in ("handicap", "clean"), f"unknown HA_REGIME={REGIME}"
 
 CLEAN = ("You are a careful math assistant. Solve the problem step by step, "
          "then write the final answer on its own line after ####.")
@@ -28,6 +33,11 @@ def noops(b):
     return [Harness(p + HANDICAP, parent=b.id, tag="noop", note="rewording") for p in NOOP_REWORDINGS]
 
 def all_manual():
+    if REGIME == "clean":
+        b = Harness(CLEAN, tag="base", note="clean start")
+        hs = [b, *[Harness(p, parent=b.id, tag="noop", note="rewording") for p in NOOP_REWORDINGS]]
+        assert len({h.id for h in hs}) == len(hs), "two manual harnesses share an id"
+        return hs
     b = base()
     hs = [b, planted(b), *noops(b)]
     assert len({h.id for h in hs}) == len(hs), "two manual harnesses share an id"

@@ -1,4 +1,4 @@
-"""Stop check after base + planted. Exit code 1 = do NOT continue.
+"""Stop check after base (+ planted in the handicap regime). Exit code 1 = do NOT continue.
 python -m scripts.check_stop [--min-gain 10] [--max-noans 0.10]"""
 import argparse, sys
 from harness.store import list_harnesses, load_harness
@@ -17,12 +17,18 @@ def main():
     au = df[(df.split == "audit") & (df.temp == 0)]
     acc = au.groupby("tag").correct.mean()
     noans = df.assign(na=df.text.map(lambda t: extract_gsm8k_answer(t) is None)).groupby("tag").na.mean()
-    gain = 100 * (acc["planted"] - acc["base"])
-    print(f"audit acc  base {acc['base']:.3f}  planted {acc['planted']:.3f}  gain {gain:.1f} pts")
-    print(f"no-answer  base {noans['base']:.3f}  planted {noans['planted']:.3f}")
     ok = True
-    if gain < a.min_gain:
-        print(f"STOP: planted gain {gain:.1f} < {a.min_gain}. The handicap is too weak; fix HANDICAP."); ok = False
+    if "planted" in acc:                      # handicap regime
+        gain = 100 * (acc["planted"] - acc["base"])
+        print(f"audit acc  base {acc['base']:.3f}  planted {acc['planted']:.3f}  gain {gain:.1f} pts")
+        print(f"no-answer  base {noans['base']:.3f}  planted {noans['planted']:.3f}")
+        if gain < a.min_gain:
+            print(f"STOP: planted gain {gain:.1f} < {a.min_gain}. The handicap is too weak; fix HANDICAP."); ok = False
+    else:                                     # clean regime: no planted edit
+        print(f"audit acc  base {acc['base']:.3f}  (clean regime, no planted edit)")
+        print(f"no-answer  base {noans['base']:.3f}")
+        if not 0.05 <= acc["base"] <= 0.95:
+            print("STOP: base accuracy is outside 5-95%; edits cannot be compared. Check scoring."); ok = False
     if noans.max() > a.max_noans:
         print("STOP: too many outputs with no extractable number. Look at the `text` column; fix extraction."); ok = False
     print("CHECK PASSED" if ok else "CHECK FAILED")

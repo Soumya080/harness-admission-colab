@@ -60,11 +60,12 @@ A proposed follow-up on selection in iterative prompt optimizers: [docs/proposal
 
 ## Reproduce
 - **Colab (T4):** open `colab_run.ipynb` and run cells 1–7 in order (~4 h).
+- **GSM-Hard, clean start (no handicap):** open `colab_gsmhard.ipynb` (sets `HA_DATASET=gsmhard`, `HA_REGIME=clean`; results in `ha_home_gsmhard`).
 - **Linux GPU:** `bash scripts/setup.sh && source .venv/bin/activate && bash scripts/run_all.sh`
 - **CPU dry run, fake model:** `HA_FAKE=1 HA_HOME=$(mktemp -d) bash scripts/run_all.sh`
 - Tests: `pytest -q` (20 tests). Claimed-vs-real analysis: `python -m scripts.claimed_vs_real`. Validation-set resolution: `python -m scripts.selection_resolution`.
 
-Env vars: `HA_HOME` (where cache/configs/results go), `HA_DTYPE` (`half` on T4), `HA_GPU_UTIL`, `HA_FAKE=1`.
+Env vars: `HA_HOME` (where cache/configs/results go), `HA_DATASET` (`gsm8k` or `gsmhard`), `HA_REGIME` (`handicap` or `clean`), `HA_DTYPE` (`half` on T4), `HA_GPU_UTIL`, `HA_FAKE=1`.
 
 ## Layout
 `data/` pools · `harness/` harness + store · `runner/` executor, cache, answer extraction · `proposer/` LLM and manual edits ·
